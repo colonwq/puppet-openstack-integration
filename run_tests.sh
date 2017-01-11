@@ -166,7 +166,7 @@ if [ "${MANAGE_REPOS}" = true ]; then
         fi
     fi
 fi
-
+exit
 print_header "Running Puppet Scenario: ${SCENARIO} (1st time)"
 run_puppet $SCENARIO
 RESULT=$?

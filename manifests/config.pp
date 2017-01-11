@@ -33,7 +33,7 @@ class openstack_integration::config (
     $memcached_servers  = ["inet6:[${host}]:11211"]
     $swift_memcached_servers = ["[${host}]:11211"]
   } else {
-    $host        = '127.0.0.1'
+    $host        = $facts['ipaddress_eth0']
     $rabbit_env  = {}
     $ip_version  = '4'
     $memcached_servers  = ["${host}:11211"]

@@ -22,7 +22,7 @@ if $::operatingsystem == 'Ubuntu' {
   $watcher_enabled = false
 } else {
   $ssl_enabled     = true
-  $ipv6            = true
+  $ipv6            = false
   $watcher_enabled = true
 }
 
@@ -32,33 +32,7 @@ class { '::openstack_integration::config':
   ipv6 => $ipv6,
 }
 
-include ::openstack_integration::cacert
-include ::openstack_integration::memcached
-include ::openstack_integration::rabbitmq
-include ::openstack_integration::mysql
-class { '::openstack_integration::keystone':
-  token_provider => 'fernet',
-}
-class { '::openstack_integration::glance':
-  backend => 'swift',
-}
-include ::openstack_integration::neutron
-class { '::openstack_integration::nova':
-  libvirt_rbd => true,
-}
-
 class { '::openstack_integration::ceph':
-  deploy_rgw   => true,
-  swift_dropin => true,
-}
-if $watcher_enabled {
-  include ::openstack_integration::watcher
-}
-
-include ::openstack_integration::provision
-
-# Don't test swift, radosgw won't pass the current tests
-# Glance, nova, neutron are true by default.
-class { '::openstack_integration::tempest':
-  watcher => $watcher_enabled,
+  deploy_rgw   => false,
+  swift_dropin => false,
 }
