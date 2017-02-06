@@ -63,6 +63,7 @@ class openstack_integration::ceph (
     frontend_type                => 'civetweb',
     rgw_frontends                => "civetweb port=${::openstack_integration::config::ip_for_url}:8080",
     rgw_user                     => 'ceph',
+    rbd_default_features         => '15',
   }
 
   $ceph_pools = ['glance', 'nova', 'cinder', 'gnocchi']
@@ -70,12 +71,6 @@ class openstack_integration::ceph (
 
   class { '::ceph::profile::mon': }
   class { '::ceph::profile::osd': }
-
-#  # Needed until https://review.openstack.org/#/c/283359 lands
-#  $ceph_migration_config = {
-#    'client/rbd_default_features'         => { value => '15' },
-#  }
-#  ensure_resources(ceph_config, $ceph_migration_config)
 
   # Extra Ceph configuration to increase performances
   $ceph_extra_config = {

@@ -121,6 +121,10 @@ mod 'swift',
   :git => 'https://git.openstack.org/openstack/puppet-swift',
   :ref => 'master'
 
+mod 'tacker',
+  :git => 'https://git.openstack.org/openstack/puppet-tacker',
+  :ref => 'master'
+
 mod 'tempest',
   :git => 'https://git.openstack.org/openstack/puppet-tempest',
   :ref => 'master'
@@ -154,6 +158,10 @@ mod 'sysctl',
   :git => 'https://github.com/duritong/puppet-sysctl',
   :ref => 'v0.0.11'
 
+mod 'ipaclient',
+  :git => 'https://github.com/joshuabaird/puppet-ipaclient',
+  :ref => '2.5.1'
+
 mod 'staging',
   :git => 'https://github.com/nanliu/puppet-staging',
   :ref => '1.0.4'
@@ -172,7 +180,7 @@ mod 'concat',
 
 mod 'firewall',
   :git => 'https://github.com/puppetlabs/puppetlabs-firewall',
-  :ref => '1.8.1'
+  :ref => '1.8.2'
 
 mod 'inifile',
   :git => 'https://github.com/puppetlabs/puppetlabs-inifile',
@@ -200,7 +208,7 @@ mod 'rsync',
 
 mod 'stdlib',
   :git => 'https://github.com/puppetlabs/puppetlabs-stdlib',
-  :ref => '4.14.0'
+  :ref => '4.15.0'
 
 mod 'vcsrepo',
   :git => 'https://github.com/puppetlabs/puppetlabs-vcsrepo',

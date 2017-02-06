@@ -64,11 +64,10 @@ class openstack_integration::nova (
   }
   class { '::nova::db::mysql_api':
     password    => 'nova',
-    #TODO(aschultz): remove this once it becomes default
-    setup_cell0 => true,
   }
-  class { '::nova::db::sync_cell_v2':
-    transport_url => $transport_url,
+  # TODO(aschultz): when Ubuntu supports cells (ocata-m3) enable this
+  if $::osfamily == 'RedHat' {
+    include ::nova::cell_v2::simple_setup
   }
   class { '::nova::db::mysql_placement':
     password => 'nova',
@@ -157,10 +156,15 @@ class openstack_integration::nova (
     barbican_endpoint           => $barbican_endpoint,
   }
   class { '::nova::compute::libvirt':
-    libvirt_virt_type => $libvirt_virt_type,
-    libvirt_cpu_mode  => $libvirt_cpu_mode,
-    migration_support => true,
-    vncserver_listen  => '0.0.0.0',
+    libvirt_virt_type     => $libvirt_virt_type,
+    libvirt_cpu_mode      => $libvirt_cpu_mode,
+    migration_support     => true,
+    vncserver_listen      => '0.0.0.0',
+    # virtlock and virtlog services resources are not idempotent
+    # on Ubuntu, let's disable it for now.
+    # https://tickets.puppetlabs.com/browse/PUP-6370
+    virtlock_service_name => false,
+    virtlog_service_name  => false,
   }
   if $libvirt_rbd {
     class { '::nova::compute::rbd':

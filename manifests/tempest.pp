@@ -32,6 +32,10 @@
 #   (optional) Define if Gnocchi needs to be tested.
 #   Default to false.
 #
+# [*panko*]
+#   (optional) Define if Panko needs to be tested.
+#   Default to false.
+#
 # [*heat*]
 #   (optional) Define if Heat needs to be tested.
 #   Default to false.
@@ -93,6 +97,7 @@ class openstack_integration::tempest (
   $ec2api                  = false,
   $glance                  = true,
   $gnocchi                 = false,
+  $panko                   = false,
   $heat                    = false,
   $horizon                 = false,
   $ironic                  = false,
@@ -114,7 +119,7 @@ class openstack_integration::tempest (
   # Install missed dependency for neutron tests
   # https://github.com/openstack/neutron/blob/master/test-requirements.txt#L20
   if ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemmajrelease, '16') >= 0) {
-    package { ['python-ddt', 'python-oslotest']:
+    package { ['python-ddt', 'python-oslotest', 'python-gabbi']:
       ensure => present
     }
   }
@@ -161,6 +166,7 @@ class openstack_integration::tempest (
     zaqar_available         => $zaqar,
     mistral_available       => $mistral,
     gnocchi_available       => $gnocchi,
+    panko_available         => $panko,
     ec2api_available        => $ec2api,
     watcher_available       => $watcher,
     public_network_name     => 'public',

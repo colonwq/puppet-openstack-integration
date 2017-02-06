@@ -21,11 +21,14 @@ case $::osfamily {
     $mistral_enabled = false
     # murano package should be fixed on Ubuntu Xenial
     $murano_enabled  = false
+    # trove package contains broken Tempest tests
+    $trove           = false
   }
   'RedHat': {
     $ipv6            = true
     $mistral_enabled = true
     $murano_enabled  = true
+    $trove           = true
   }
   default: {
     fail("Unsupported osfamily (${::osfamily})")
@@ -38,13 +41,13 @@ if ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemmajrelease
   $ssl_enabled       = false
   # linuxbridge driver is not working with latest Ubuntu packaging.
   $neutron_plugin    = 'openvswitch'
-  $designate_enabled = true
+  # TODO(aschultz): does not work with ocata-m2 right now, check it out when
+  # we get m3
+  $designate_enabled = false
 } else {
   $ssl_enabled       = true
   $neutron_plugin    = 'linuxbridge'
-  # Designate packaging in Ocata is missing monasca dependencies.
-  # Until it's fixed, let's disable it.
-  $designate_enabled = false
+  $designate_enabled = true
 }
 
 include ::openstack_integration
@@ -64,7 +67,9 @@ class { '::openstack_integration::neutron':
   driver => $neutron_plugin,
 }
 include ::openstack_integration::nova
-include ::openstack_integration::trove
+if $trove_enabled {
+  include ::openstack_integration::trove
+}
 include ::openstack_integration::horizon
 include ::openstack_integration::heat
 include ::openstack_integration::sahara
@@ -81,7 +86,7 @@ include ::openstack_integration::provision
 
 class { '::openstack_integration::tempest':
   designate => $designate_enabled,
-  trove     => true,
+  trove     => $trove_enabled,
   mistral   => $mistral_enabled,
   sahara    => true,
   horizon   => true,
