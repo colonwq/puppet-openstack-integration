@@ -98,35 +98,35 @@ class openstack_integration::ceph (
     }
 
 
-    $password    = 'secret'
-    $auth_name   = 'rgwuser'
-    $project     = 'services'
-    $user_domain = 'default'
-
-    #configure rgw to use keystone
-    ceph::rgw::keystone { 'radosgw.gateway':
-      rgw_keystone_url            => $::openstack_integration::config::keystone_admin_uri,
-      rgw_keystone_version        => 'v3',
-      user                        => 'ceph',
-      use_pki                     => false,
-      rgw_keystone_accepted_roles => ['admin', 'Member'],
-      rgw_keystone_admin_domain   => $user_domain,
-      rgw_keystone_admin_project  => $project,
-      rgw_keystone_admin_user     => $auth_name,
-      rgw_keystone_admin_password => $password,
-    }
-
-    if $swift_dropin {
-      class { '::ceph::rgw::keystone::auth':
-        password     => $password,
-        user         => $auth_name,
-        tenant       => $project,
-        public_url   => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
-        admin_url    => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
-        internal_url => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
-      }
-      # FIXME(Xarses) remove when supported in puppet-ceph
-      Service<| tag == 'ceph-radosgw' |> -> Service <| tag == 'glance-service' |>
-    }
+#    $password    = 'secret'
+#    $auth_name   = 'rgwuser'
+#    $project     = 'services'
+#    $user_domain = 'default'
+#
+#    #configure rgw to use keystone
+#    ceph::rgw::keystone { 'radosgw.gateway':
+#      rgw_keystone_url            => $::openstack_integration::config::keystone_admin_uri,
+#      rgw_keystone_version        => 'v3',
+#      user                        => 'ceph',
+#      use_pki                     => false,
+#      rgw_keystone_accepted_roles => ['admin', 'Member'],
+#      rgw_keystone_admin_domain   => $user_domain,
+#      rgw_keystone_admin_project  => $project,
+#      rgw_keystone_admin_user     => $auth_name,
+#      rgw_keystone_admin_password => $password,
+#    }
+#
+##    if $swift_dropin {
+#      class { '::ceph::rgw::keystone::auth':
+#        password     => $password,
+#        user         => $auth_name,
+#        tenant       => $project,
+#        public_url   => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
+#        admin_url    => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
+#        internal_url => "http://${::openstack_integration::config::ip_for_url}:8080/swift/v1",
+#      }
+#      # FIXME(Xarses) remove when supported in puppet-ceph
+#      Service<| tag == 'ceph-radosgw' |> -> Service <| tag == 'glance-service' |>
+#    }
   }
 }

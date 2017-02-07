@@ -33,6 +33,6 @@ class { '::openstack_integration::config':
 }
 
 class { '::openstack_integration::ceph':
-  deploy_rgw   => false,
+  deploy_rgw   => true,
   swift_dropin => false,
 }
