@@ -21,7 +21,7 @@ if $::operatingsystem == 'Ubuntu' {
   # Watcher packages are not available in Ubuntu repository.
   $watcher_enabled = false
 } else {
-  $ssl_enabled     = true
+  $ssl_enabled     = false
   $ipv6            = false
   # Re-enable Watcher when monascaclient is packaged in RDO and
   # added to Watcher dependencies.
